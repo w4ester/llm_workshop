@@ -1,0 +1,759 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LLM Workshop for Marketers</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.24.1/prism.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.24.1/components/prism-javascript.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.24.1/components/prism-json.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.24.1/themes/prism.min.css">
+    <style>
+        :root {
+            --primary: #4f46e5;
+            --primary-light: #6366f1;
+            --primary-dark: #4338ca;
+            --secondary: #10b981;
+            --secondary-light: #34d399;
+            --secondary-dark: #059669;
+            --dark: #1f2937;
+            --gray: #4b5563;
+            --light-gray: #f3f4f6;
+            --white: #ffffff;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: var(--dark);
+            background-color: var(--light-gray);
+        }
+
+        header {
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            color: var(--white);
+            text-align: center;
+            padding: 2rem 1rem;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        h1 {
+            font-size: 2.5rem;
+            margin-bottom: 0.5rem;
+        }
+
+        h2 {
+            font-size: 1.8rem;
+            margin: 1.5rem 0 1rem;
+            color: var(--primary-dark);
+        }
+
+        h3 {
+            font-size: 1.4rem;
+            margin: 1.2rem 0 0.8rem;
+            color: var(--primary);
+        }
+
+        .subtitle {
+            font-size: 1.2rem;
+            opacity: 0.9;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        nav {
+            background-color: var(--white);
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 2rem;
+        }
+
+        .logo {
+            font-weight: bold;
+            font-size: 1.2rem;
+            color: var(--primary);
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 1.5rem;
+        }
+
+        .nav-link {
+            text-decoration: none;
+            color: var(--gray);
+            font-weight: 500;
+            transition: color 0.3s;
+        }
+
+        .nav-link:hover {
+            color: var(--primary);
+        }
+
+        .active {
+            color: var(--primary);
+            border-bottom: 2px solid var(--primary);
+        }
+
+        section {
+            background-color: var(--white);
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+            padding: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .card {
+            background-color: var(--white);
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+            border-left: 4px solid var(--primary);
+        }
+
+        .token-card {
+            display: inline-block;
+            padding: 0.3rem 0.6rem;
+            margin: 0.2rem;
+            border-radius: 4px;
+            font-family: monospace;
+            font-size: 0.9rem;
+            background-color: #e5e7eb;
+            border: 1px solid #d1d5db;
+            position: relative;
+        }
+
+        .token-card:hover .token-id {
+            display: block;
+        }
+
+        .token-id {
+            display: none;
+            position: absolute;
+            top: -20px;
+            left: 50%;
+            transform: translateX(-50%);
+            background-color: var(--dark);
+            color: var(--white);
+            padding: 2px 5px;
+            border-radius: 3px;
+            font-size: 0.7rem;
+            z-index: 10;
+        }
+
+        .special-token {
+            background-color: #fef3c7;
+            border-color: #fbbf24;
+        }
+
+        .input-group {
+            margin-bottom: 1.5rem;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+        }
+
+        input[type="text"],
+        textarea {
+            width: 100%;
+            padding: 0.75rem;
+            border: 1px solid #d1d5db;
+            border-radius: 4px;
+            font-size: 1rem;
+            font-family: inherit;
+        }
+
+        textarea {
+            min-height: 100px;
+            resize: vertical;
+        }
+
+        button {
+            background-color: var(--primary);
+            color: var(--white);
+            border: none;
+            border-radius: 4px;
+            padding: 0.75rem 1.5rem;
+            font-size: 1rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        button:hover {
+            background-color: var(--primary-dark);
+        }
+
+        .secondary-btn {
+            background-color: var(--secondary);
+        }
+
+        .secondary-btn:hover {
+            background-color: var(--secondary-dark);
+        }
+
+        .outline-btn {
+            background-color: transparent;
+            color: var(--primary);
+            border: 1px solid var(--primary);
+        }
+
+        .outline-btn:hover {
+            background-color: rgba(79, 70, 229, 0.1);
+        }
+
+        .btn-group {
+            display: flex;
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+
+        .result-box {
+            background-color: var(--light-gray);
+            border-radius: 4px;
+            padding: 1rem;
+            margin-top: 1rem;
+            max-height: 300px;
+            overflow-y: auto;
+            white-space: pre-wrap;
+            font-family: monospace;
+        }
+
+        .chat-container {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+            margin-top: 1rem;
+            max-height: 400px;
+            overflow-y: auto;
+            padding: 1rem;
+            background-color: var(--light-gray);
+            border-radius: 8px;
+        }
+
+        .message {
+            padding: 0.75rem 1rem;
+            border-radius: 8px;
+            max-width: 80%;
+        }
+
+        .user-message {
+            background-color: #e9ecef;
+            align-self: flex-end;
+        }
+
+        .ai-message {
+            background-color: #d8e2fc;
+            align-self: flex-start;
+        }
+
+        .tabs {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 1rem;
+            border-bottom: 1px solid #d1d5db;
+        }
+
+        .tab {
+            padding: 0.5rem 1rem;
+            cursor: pointer;
+            border-bottom: 2px solid transparent;
+        }
+
+        .tab.active {
+            border-bottom: 2px solid var(--primary);
+            color: var(--primary);
+            font-weight: 500;
+        }
+
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        .comparison {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1.5rem;
+            margin-top: 1.5rem;
+        }
+
+        .comparison-col {
+            background-color: var(--light-gray);
+            padding: 1rem;
+            border-radius: 8px;
+        }
+
+        .comparison-heading {
+            font-weight: 600;
+            text-align: center;
+            margin-bottom: 0.5rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 1px solid #d1d5db;
+        }
+
+        .agent-diagram {
+            max-width: 100%;
+            height: auto;
+            margin: 1.5rem 0;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .step {
+            display: flex;
+            margin-bottom: 1.5rem;
+            gap: 1rem;
+        }
+
+        .step-number {
+            flex-shrink: 0;
+            width: 36px;
+            height: 36px;
+            background-color: var(--primary);
+            color: var(--white);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            font-weight: bold;
+        }
+
+        .step-content {
+            flex-grow: 1;
+        }
+
+        .note {
+            background-color: #e0f2fe;
+            border-left: 4px solid #38bdf8;
+            padding: 1rem;
+            margin: 1rem 0;
+            border-radius: 0 4px 4px 0;
+        }
+
+        .warning {
+            background-color: #fef3c7;
+            border-left: 4px solid #f59e0b;
+            padding: 1rem;
+            margin: 1rem 0;
+            border-radius: 0 4px 4px 0;
+        }
+
+        code {
+            font-family: monospace;
+            background-color: #f3f4f6;
+            padding: 0.2rem 0.4rem;
+            border-radius: 4px;
+            font-size: 0.9rem;
+        }
+
+        pre {
+            margin: 1rem 0;
+            border-radius: 4px;
+            overflow-x: auto;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 1rem 0;
+        }
+
+        th, td {
+            padding: 0.75rem;
+            text-align: left;
+            border-bottom: 1px solid #d1d5db;
+        }
+
+        th {
+            background-color: #f9fafb;
+            font-weight: 600;
+        }
+
+        tr:hover {
+            background-color: #f9fafb;
+        }
+
+        @media (max-width: 768px) {
+            .nav-container {
+                flex-direction: column;
+                padding: 1rem;
+            }
+
+            .nav-links {
+                margin-top: 1rem;
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+
+            .container {
+                padding: 1rem;
+            }
+
+            .comparison {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* Accordion Styles */
+        .accordion {
+            margin-bottom: 1rem;
+        }
+
+        .accordion-header {
+            padding: 1rem;
+            background-color: #f3f4f6;
+            border-radius: 4px;
+            font-weight: 500;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .accordion-header:hover {
+            background-color: #e5e7eb;
+        }
+
+        .accordion-content {
+            padding: 1rem;
+            border: 1px solid #e5e7eb;
+            border-top: none;
+            border-radius: 0 0 4px 4px;
+            display: none;
+        }
+
+        .accordion-header.active {
+            border-radius: 4px 4px 0 0;
+            background-color: #e5e7eb;
+        }
+
+        .accordion-header.active + .accordion-content {
+            display: block;
+        }
+
+        /* Loading Spinner */
+        .spinner {
+            border: 4px solid rgba(0, 0, 0, 0.1);
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            border-left-color: var(--primary);
+            animation: spin 1s linear infinite;
+            margin: 1rem auto;
+            display: none;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .hidden {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>LLM Workshop for Marketers</h1>
+        <p class="subtitle">From Novice to Comfortable: Understanding AI Language Models</p>
+    </header>
+
+    <nav>
+        <div class="nav-container">
+            <div class="logo">AI Workshop</div>
+            <div class="nav-links">
+                <a href="#tokenization" class="nav-link">Tokenization</a>
+                <a href="#prompt-engineering" class="nav-link">Prompt Engineering</a>
+                <a href="#templates" class="nav-link">Prompt Templates</a>
+                <a href="#agents" class="nav-link">AI Agents</a>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container">
+        <section id="introduction">
+            <h2>Welcome to the LLM Workshop</h2>
+            <p>This interactive workshop is designed to help marketers understand and leverage Large Language Models (LLMs) like GPT-4, Claude, and others. By the end of this workshop, you'll understand:</p>
+            
+            <ul style="margin-left: 2rem; margin-top: 1rem;">
+                <li>How LLMs process text through tokenization</li>
+                <li>How to craft effective prompts for better results</li>
+                <li>How to create reusable prompt templates</li>
+                <li>The basics of AI agents and how they can automate tasks</li>
+            </ul>
+
+            <div class="note">
+                <strong>Note:</strong> This workshop is designed for marketers with little to no technical background. All examples and exercises are focused on practical marketing applications.
+            </div>
+        </section>
+
+        <section id="tokenization">
+            <h2>1. Understanding Tokenization</h2>
+            <p>Before we dive into prompting, it's important to understand how LLMs process text. LLMs don't read text word by word like humans do - they break text into "tokens."</p>
+            
+            <h3>What are Tokens?</h3>
+            <p>Tokens are the basic units that LLMs process. A token can be a word, part of a word, or even a single character. Understanding tokenization helps you:</p>
+            <ul style="margin-left: 2rem; margin-top: 0.5rem;">
+                <li>Optimize your prompts for cost (since LLMs charge by token)</li>
+                <li>Stay within context window limits</li>
+                <li>Understand how LLMs interpret your text</li>
+            </ul>
+
+            <div class="card">
+                <h3>TikToken Visualizer</h3>
+                <p>Enter some text below to see how it's broken into tokens. You'll also see special tokens like &lt;|im_start|&gt; that mark the beginning and end of user/assistant messages.</p>
+                
+                <div class="input-group">
+                    <label for="token-input">Enter text to tokenize:</label>
+                    <textarea id="token-input" placeholder="Type some text here...">Hello world! How are marketing campaigns optimized with AI?</textarea>
+                </div>
+                
+                <button id="tokenize-btn">Tokenize Text</button>
+                
+                <div class="spinner" id="token-spinner"></div>
+                
+                <div id="token-result" class="result-box hidden">
+                    <h4>Tokens:</h4>
+                    <div id="tokens-container"></div>
+                    <div style="margin-top: 1rem;">
+                        <strong>Total tokens: <span id="token-count">0</span></strong>
+                    </div>
+                </div>
+
+                <div id="chat-tokenization" class="hidden" style="margin-top: 1.5rem;">
+                    <h4>Chat Format Tokenization:</h4>
+                    <p>Here's how your message would look in a chat format with special tokens:</p>
+                    <div id="chat-tokens-container"></div>
+                    <div style="margin-top: 1rem;">
+                        <strong>Total chat tokens: <span id="chat-token-count">0</span></strong>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="prompt-engineering">
+            <h2>2. Prompt Engineering Basics</h2>
+            <p>Prompt engineering is the art and science of crafting inputs to get the best outputs from LLMs. Well-crafted prompts can dramatically improve the quality and relevance of AI responses.</p>
+
+            <h3>Key Principles of Effective Prompting</h3>
+            <div class="step">
+                <div class="step-number">1</div>
+                <div class="step-content">
+                    <h4>Be specific and clear</h4>
+                    <p>Clearly state what you want, including format, tone, length, and audience.</p>
+                </div>
+            </div>
+            <div class="step">
+                <div class="step-number">2</div>
+                <div class="step-content">
+                    <h4>Provide context</h4>
+                    <p>Give relevant background information and constraints.</p>
+                </div>
+            </div>
+            <div class="step">
+                <div class="step-number">3</div>
+                <div class="step-content">
+                    <h4>Use examples (few-shot learning)</h4>
+                    <p>Show examples of desired inputs and outputs.</p>
+                </div>
+            </div>
+            <div class="step">
+                <div class="step-number">4</div>
+                <div class="step-content">
+                    <h4>Break complex tasks into steps</h4>
+                    <p>Guide the model through a reasoning process.</p>
+                </div>
+            </div>
+
+            <div class="card">
+                <h3>Prompt Comparison Tool</h3>
+                <p>See the difference between basic and engineered prompts for marketing tasks.</p>
+                
+                <div class="tabs">
+                    <div class="tab active" data-tab="tab1">Social Media</div>
+                    <div class="tab" data-tab="tab2">Email Marketing</div>
+                    <div class="tab" data-tab="tab3">Content Creation</div>
+                </div>
+                
+                <div class="tab-content active" id="tab1">
+                    <div class="comparison">
+                        <div class="comparison-col">
+                            <div class="comparison-heading">Basic Prompt</div>
+                            <pre><code class="language-plaintext">Write a social media post about our new product.</code></pre>
+                            <div class="result-box">
+                                <p>Check out our amazing new product! It's the best thing we've ever made and you're going to love it. Don't miss out on this incredible opportunity. Buy now!</p>
+                            </div>
+                        </div>
+                        <div class="comparison-col">
+                            <div class="comparison-heading">Engineered Prompt</div>
+                            <pre><code class="language-plaintext">Write a LinkedIn post about our new AI-powered marketing analytics dashboard that helps marketing teams track campaign performance in real-time. 
+
+The post should:
+- Be professional but conversational
+- Highlight the key benefit of saving 5+ hours/week on reporting
+- Include a question to encourage engagement
+- Be around 150 words
+- Include 3 relevant hashtags</code></pre>
+                            <div class="result-box">
+                                <p>Excited to announce the launch of our new AI-powered Marketing Analytics Dashboard! 🚀</p>
+                                <p>As marketers, we all know the pain of spending hours putting together campaign reports, only to find that the data is already outdated by the time we present it.</p>
+                                <p>Our new dashboard solves this problem with real-time analytics that put all your campaign metrics in one place. The best part? It's saving our beta users an average of 5+ hours every week on reporting tasks alone.</p>
+                                <p>What would you do with an extra 5 hours in your work week?</p>
+                                <p>#MarketingAnalytics #AIforMarketers #ProductivityHacks</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="tab-content" id="tab2">
+                    <div class="comparison">
+                        <div class="comparison-col">
+                            <div class="comparison-heading">Basic Prompt</div>
+                            <pre><code class="language-plaintext">Write a marketing email.</code></pre>
+                            <div class="result-box">
+                                <p>Subject: Special Offer Inside!</p>
+                                <p>Dear Valued Customer,</p>
+                                <p>We hope this email finds you well. We are reaching out to inform you about our latest promotion. For a limited time only, we are offering discounts on all our products. Don't miss this amazing opportunity!</p>
+                                <p>Click here to learn more.</p>
+                                <p>Best regards,<br>The Marketing Team</p>
+                            </div>
+                        </div>
+                        <div class="comparison-col">
+                            <div class="comparison-heading">Engineered Prompt</div>
+                            <pre><code class="language-plaintext">Write a re-engagement email for customers who haven't purchased in 90 days from our online fitness equipment store.
+
+Details:
+- Target: 30-45 year old professionals who previously bought home workout equipment
+- Tone: Motivational but not pushy
+- Include: Personalization placeholder for name, mention of previous purchase category, 15% discount code "COMEBACK15"
+- CTA: Shop new arrivals in their preferred category
+- Subject line: Should create curiosity without sounding like marketing
+- Length: 200-250 words</code></pre>
+                            <div class="result-box">
+                                <p>Subject: Is your [previous purchase] collecting dust, [First Name]?</p>
+                                <p>Hi [First Name],</p>
+                                <p>It's been a while since you added that [previous purchase category] to your home gym setup, and we've been wondering how your fitness journey is going.</p>
+                                <p>Life gets busy—we get it. Sometimes our workout routines are the first thing to slip when deadlines loom and schedules fill up.</p>
+                                <p>But here's the thing: research shows that mixing up your workout equipment every 2-3 months can boost motivation by up to 40% and help you break through plateaus.</p>
+                                <p>We've just launched some exciting new additions to our [previous purchase category] collection that complement what you already have:</p>
+                                <p>[Brief mention of 2-3 new relevant products]</p>
+                                <p>To help you refresh your home gym setup, we've created a special 15% discount just for you: COMEBACK15</p>
+                                <p>It's valid for the next 7 days on any new arrivals.</p>
+                                <p>Ready to recapture that motivation?</p>
+                                <p><strong>➡️ Shop New [Category] Arrivals</strong></p>
+                                <p>Here's to your continued fitness journey,</p>
+                                <p>Jamie<br>Fitness Expert at FitEquip</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="tab-content" id="tab3">
+                    <div class="comparison">
+                        <div class="comparison-col">
+                            <div class="comparison-heading">Basic Prompt</div>
+                            <pre><code class="language-plaintext">Write a blog post about SEO.</code></pre>
+                            <div class="result-box">
+                                <p><strong>Understanding SEO: A Beginner's Guide</strong></p>
+                                <p>Search Engine Optimization (SEO) is the practice of increasing the quantity and quality of traffic to your website through organic search engine results. It's an essential aspect of digital marketing.</p>
+                                <p>There are three key components to SEO: on-page optimization, off-page optimization, and technical SEO. On-page optimization involves optimizing your content and HTML source code. Off-page optimization refers to actions taken outside of your website to impact your rankings. Technical SEO focuses on the backend of your website.</p>
+                                <p>To improve your SEO, focus on keyword research, quality content creation, link building, and mobile optimization. Remember that SEO is a long-term strategy, so patience is key.</p>
+                            </div>
+                        </div>
+                        <div class="comparison-col">
+                            <div class="comparison-heading">Engineered Prompt</div>
+                            <pre><code class="language-plaintext">Write a comprehensive blog post about voice search SEO optimization for local businesses in 2025.
+
+The post should:
+- Target small business owners with limited technical knowledge
+- Include a brief explanation of how voice search differs from text search
+- Focus on 5 actionable tactics that don't require technical expertise
+- Include specific examples for a restaurant, retail store, and service business
+- Format with H2 and H3 subheadings, bullet points, and short paragraphs
+- Incorporate statistics about voice search adoption
+- Conclude with implementation steps and common mistakes to avoid
+- Suggest a free tool for voice search analysis
+- Word count: 1200-1500 words</code></pre>
+                            <div class="result-box">
+                                <p><strong>Voice Search SEO: 5 Simple Optimization Tactics for Local Businesses in 2025</strong></p>
+                                <p><em>With over 65% of consumers now using voice assistants to find local businesses, voice search optimization has moved from optional to essential. This guide breaks down exactly how small businesses can capture this growing traffic—no technical expertise required.</em></p>
+                                <h2>Why Voice Search Matters for Your Local Business</h2>
+                                <p>Remember when having a website was considered "optional" for local businesses? Voice search has reached that same tipping point in 2025.</p>
+                                <p>According to the latest data from Google, voice searches now account for nearly 40% of all local business searches, with that number jumping to 62% on mobile devices.</p>
+                                <p>But here's the good news: most of your competitors haven't optimized for voice search yet, creating a significant opportunity for businesses that act now.</p>
+                                <h2>How Voice Search Differs from Traditional Search</h2>
+                                <p>Before diving into tactics, it's important to understand a key difference: people don't talk to their devices the same way they type.</p>
+                                <p>When someone types a search, they might enter "best Italian restaurant downtown." But when using voice, they'll ask a complete question: "What's the best Italian restaurant in downtown Portland that's open now?"</p>
+                                <p>Voice searches are:</p>
+                                <ul>
+                                    <li><strong>Longer</strong> (7-9 words vs. 1-3 for text)</li>
+                                    <li><strong>Question-based</strong> (who, what, where, when, why, how)</li>
+                                    <li><strong>Conversational</strong> in tone</li>
+                                    <li><strong>Often location-specific</strong> ("near me" or neighborhood names)</li>
+                                    <li><strong>More immediate</strong> ("open now," "available today")</li>
+                                </ul>
+                                <p>This fundamentally changes how you need to approach your content and SEO strategy.</p>
+                                <h2>5 Voice Search Optimization Tactics Anyone Can Implement</h2>
+                                <h3>1. Create FAQ Pages That Answer Natural Questions</h3>
+                                <p>The simplest way to capture voice search traffic is to create content that answers common questions your customers ask.</p>
+                                <p><em>For a restaurant:</em> "What are your gluten-free options?" or "Do you have outdoor seating?"</p>
+                                <p><em>For a retail store:</em> "What hours are you open on Saturday?" or "Do you carry [specific brand]?"</p>
+                                <p><em>For a service business:</em> "How quickly can you fix a leaking roof?" or "Do you offer free estimates?"</p>
+                                <p>Action step: Create a dedicated FAQ page on your website with at least 20 common questions written exactly as customers would ask them out loud, along with clear, direct answers.</p>
+                                <p>[Content continues...]</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <h3 style="margin-top: 2rem;">Try it yourself</h3>
+                <p>Now you can try improving a basic prompt yourself:</p>
+
+                <div class="input-group">
+                    <label for="basic-prompt">Basic Prompt:</label>
+                    <textarea id="basic-prompt" readonly>Write ad copy for our product.</textarea>
+                </div>
+
+                <div class="input-group">
+                    <label for="engineered-prompt">Your Engineered Prompt:</label>
+                    <textarea id="engineered-prompt" placeholder="Improve the prompt by adding specifics about the product, target audience, tone, format, length, etc."></textarea>
+                </div>
+                
+                <div class="note">
+                    <p><strong>Tip:</strong> Great prompts typically include these components:</p>
+                    <ul style="margin-left: 1rem; margin-top: 0.5rem;">
+                        <li>Clear task definition ("Create," "Write," "Analyze," etc.)</li>
+                        <li>Specific context (industry, product, audience)</li>
+                        <li>Format instructions (length, structure, tone)</li>
+                        <li>Constraints or requirements (must include, must avoid)</li>
+                        <li>Examples (if helpful)</li></li>
+                        <li>Format instructions (length, structure, tone)
