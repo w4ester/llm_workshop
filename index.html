@@ -241,6 +241,8 @@
             overflow-y: auto;
             white-space: pre-wrap;
             font-family: monospace;
+            width: 100%;
+            box-sizing: border-box;
         }
 
         .chat-container {
@@ -303,12 +305,15 @@
             grid-template-columns: 1fr 1fr;
             gap: 1.5rem;
             margin-top: 1.5rem;
+            width: 100%;
         }
 
         .comparison-col {
             background-color: var(--light-gray);
             padding: 1rem;
             border-radius: 8px;
+            width: 100%;
+            overflow-wrap: break-word;
         }
 
         .comparison-heading {
@@ -378,6 +383,14 @@
             margin: 1rem 0;
             border-radius: 4px;
             overflow-x: auto;
+            max-width: 100%;
+        }
+        
+        pre code {
+            display: block;
+            width: 100%;
+            word-wrap: break-word;
+            white-space: pre-wrap;
         }
 
         table {
@@ -419,6 +432,20 @@
 
             .comparison {
                 grid-template-columns: 1fr;
+            }
+            
+            .comparison-col {
+                width: 100%;
+            }
+            
+            .result-box {
+                width: 100%;
+                max-width: 100%;
+            }
+            
+            pre, pre code {
+                max-width: 100%;
+                width: 100%;
             }
         }
 
