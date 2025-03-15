@@ -130,6 +130,8 @@
             padding: 1.5rem;
             margin-bottom: 1.5rem;
             border-left: 4px solid var(--primary);
+            width: 100%;
+            box-sizing: border-box;
         }
 
         .token-card {
@@ -278,6 +280,8 @@
             gap: 1rem;
             margin-bottom: 1rem;
             border-bottom: 1px solid #d1d5db;
+            width: 100%;
+            box-sizing: border-box;
         }
 
         .tab {
@@ -294,10 +298,13 @@
 
         .tab-content {
             display: none;
+            width: 100%;
+            box-sizing: border-box;
         }
 
         .tab-content.active {
             display: block;
+            width: 100%;
         }
 
         .comparison {
@@ -384,6 +391,8 @@
             border-radius: 4px;
             overflow-x: auto;
             max-width: 100%;
+            width: 100%;
+            box-sizing: border-box;
         }
         
         pre code {
@@ -391,6 +400,16 @@
             width: 100%;
             word-wrap: break-word;
             white-space: pre-wrap;
+            box-sizing: border-box;
+        }
+        
+        /* Fix for tab content examples */
+        .comparison-col pre,
+        .comparison-col .result-box {
+            width: 100%;
+            box-sizing: border-box;
+            overflow-wrap: break-word;
+            word-break: break-word;
         }
 
         table {
