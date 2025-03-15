@@ -239,12 +239,34 @@
             border-radius: 4px;
             padding: 1rem;
             margin-top: 1rem;
-            max-height: 300px;
-            overflow-y: auto;
+            max-height: 400px; /* Increased from 300px for more content */
+            overflow-y: auto; /* Enable vertical scrolling */
             white-space: pre-wrap;
             font-family: monospace;
             width: 100%;
             box-sizing: border-box;
+            /* Add scroll indicator styles */
+            scrollbar-width: thin;
+            scrollbar-color: rgba(79, 70, 229, 0.4) var(--light-gray);
+            position: relative; /* For scroll indicator */
+        }
+
+        /* Add scroll indicator shadow */
+        .result-box::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 20px;
+            background: linear-gradient(to top, var(--light-gray), transparent);
+            pointer-events: none;
+            opacity: 0.7;
+            display: none; /* Only show when needed */
+        }
+
+        .result-box.has-overflow::after {
+            display: block;
         }
 
         .chat-container {
@@ -320,7 +342,10 @@
             padding: 1rem;
             border-radius: 8px;
             width: 100%;
-            overflow-wrap: break-word;
+            display: flex;
+            flex-direction: column;
+            height: auto;
+            overflow: hidden; /* Prevent content spillover */
         }
 
         .comparison-heading {
@@ -404,8 +429,10 @@
         }
         
         /* Fix for tab content examples */
-        .comparison-col pre,
+        .comparison-col pre, 
+        .comparison-col code,
         .comparison-col .result-box {
+            max-width: 100%;
             width: 100%;
             box-sizing: border-box;
             overflow-wrap: break-word;
@@ -450,7 +477,8 @@
             }
 
             .comparison {
-                grid-template-columns: 1fr;
+                grid-template-columns: 1fr; /* Stack columns on mobile */
+                gap: 2rem; /* More space between stacked columns */
             }
             
             .comparison-col {
@@ -458,8 +486,7 @@
             }
             
             .result-box {
-                width: 100%;
-                max-width: 100%;
+                max-height: 300px; /* Slightly smaller on mobile */
             }
             
             pre, pre code {
@@ -1014,6 +1041,22 @@ Context about our business:
     </div>
 
     <script>
+        // Function to detect and update scroll indicators
+        function updateScrollIndicators() {
+            document.querySelectorAll('.result-box').forEach(box => {
+                if (box.scrollHeight > box.clientHeight) {
+                    box.classList.add('has-overflow');
+                } else {
+                    box.classList.remove('has-overflow');
+                }
+            });
+        }
+          
+        // Run on page load
+        window.addEventListener('load', updateScrollIndicators);
+        // Run on resize
+        window.addEventListener('resize', updateScrollIndicators);
+        
         // Tabs functionality
         document.querySelectorAll('.tab').forEach(tab => {
             tab.addEventListener('click', () => {
@@ -1026,6 +1069,9 @@ Context about our business:
                 // Add active class to clicked tab and corresponding content
                 tab.classList.add('active');
                 document.getElementById(tabId).classList.add('active');
+                
+                // Update scroll indicators after tab change
+                setTimeout(updateScrollIndicators, 100);
             });
         });
         
